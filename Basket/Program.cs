@@ -22,17 +22,25 @@
             bool isEnd = false;
 
             Console.WriteLine("Benvenuto nella tua lista della spesa!\n");
-
-            Console.WriteLine(
-                "Cosa vuoi Fare?\n" +
-                "-'a' Aggiungere un prodotto\n" +
-                "-'r' Rimuovere un prodotto\n" +
-                "-'e' Terminare la lista e vedere il totale"
-                );
             
             while (!isEnd)
             {
+                Console.WriteLine(
+                    "Cosa vuoi Fare?\n" +
+                    "-'a' Aggiungere un prodotto" 
+                    );
+
+                if (myBasket.Count > 0)
+                {
+                    Console.WriteLine(
+                        "-'r' Rimuovere un prodotto\n" +
+                        "-'e' Terminare la lista e vedere il totale"
+                    );
+                }
+
                 var input = (Console.ReadLine() ?? String.Empty).ToLower().Trim();
+
+                Console.Clear();
 
                 if (!string.IsNullOrEmpty(input) )
                 {
@@ -46,35 +54,56 @@
                             Console.WriteLine($"[{i}] {product.Name} - {product.Price}");
                         }
 
-                        var index = productList.Count;
-
-                        while (index >= productList.Count) 
-                        {
-                            var prodotto = Console.ReadLine();
-
-                            if (Int32.TryParse(prodotto, out int numero))
-                            {
-                                index = numero;
-                            }
-                        };
+                        var index = CheckIsNum(productList);
 
                         myBasket.Add(productList[index]);
 
-                        foreach (var item in myBasket)
+                        Console.WriteLine($"Hai aggiunto {productList[index].Name} alla lista.\n");
+                    }
+                    else if (input == "r")
+                    {
+                        Console.WriteLine($"Che prodotto vuoi rimuovere?");
+
+                        for (int i = 0; i < myBasket.Count; i++)
                         {
-                            Console.WriteLine(item.Name);
+                            var basketP = myBasket[i];
+                            Console.WriteLine($"[{i}] {basketP.Name} - {basketP.Price}");
                         }
+
+                        var indexRemove = CheckIsNum(myBasket);
+                        var productToRemove = myBasket[indexRemove];
+
+                        myBasket.RemoveAt(indexRemove);
+
+                        Console.WriteLine($"Hai rimosso {productToRemove.Name}.");
+                        
                     }
                     else
                         isEnd = true;
                 }
             }
-
             
+        }
 
+        private static int CheckIsNum(List<Product> list)
+        // controlla che input inserito sia un numero e sia compreso nel range della lista
+        {
+            var index = list.Count;
 
+            while (index >= list.Count)
+            {
+                var prodotto = Console.ReadLine();
 
+                if (Int32.TryParse(prodotto, out int numero))
+                {
+                    index = numero;
 
+                    if (index >= list.Count)
+                        Console.WriteLine("Inserisci un numero compreso nella lista.");
+                }
+            };
+
+            return index;
         }
     }
 }
