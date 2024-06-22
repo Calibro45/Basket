@@ -16,14 +16,14 @@
                 while (index >= list.Count)
                 {
                     var prodotto = Console.ReadLine();
+                    var isNumero = Int32.TryParse(prodotto, out int numero);
 
-                    if (Int32.TryParse(prodotto, out int numero))
+                    if (isNumero && numero < list.Count)
                     {
                         index = numero;
-
-                        if (index >= list.Count)
-                            Console.WriteLine("Inserisci un numero compreso nella lista.");
                     }
+                    else
+                        Console.WriteLine("Inserisci un numero compreso nella lista.");
                 };
 
                 return index;
@@ -54,15 +54,15 @@
                 {
                     Console.WriteLine(
                         "Cosa vuoi Fare?\n" +
-                        "- 'e' Uscire dalla lista\n" +
-                        "- 'a' Aggiungere un prodotto"
+                        "\t- [U]scire dalla lista\n" +
+                        "\t- [A]ggiungere un prodotto"
                         );
 
                     if (myBasket.Count > 0)
                     {
                         Console.WriteLine(
-                            "- 'r' Rimuovere un prodotto\n" +
-                            "- 't' vedere il totale del carrello"
+                            "\t- [R]imuovere un prodotto\n" +
+                            "\t- [T]otale del carrello"
                         );
                     }
 
@@ -79,7 +79,7 @@
                             for (int i = 0; i < productList.Count; i++)
                             {
                                 var product = productList[i];
-                                Console.WriteLine($"[{i}] {product.Name} - {product.Price}$");
+                                Console.WriteLine($"\t[{i}] {product.Name} - {product.Price}$");
                             }
 
                             var index = CheckIsNum(productList);
@@ -124,21 +124,21 @@
                                 $"- Totale prodotti | {myBasket.Total}$\n"
                                 );
                         }
-                        else if (input == "e")
+                        else if (input == "u")
                         {
-                            Console.WriteLine($"Vuoi uscire dal programma? 'si' o 'no'");
+                            Console.WriteLine($"Vuoi uscire dal programma? (y/n)");
 
-                            var answer = Console.ReadLine();
+                            var answer = (Console.ReadLine() ?? string.Empty).ToLower().Trim();
 
-                            while (string.IsNullOrEmpty(answer) && answer != "si" && answer != "no")
+                            while (string.IsNullOrEmpty(answer) && answer != "y" && answer != "n")
                             {
-                                Console.WriteLine("Inserisci un valore valido! 'si' o 'no'");
+                                Console.WriteLine("Inserisci un valore valido! (y/n)");
                                 answer = Console.ReadLine();
                             }
 
                             answer = answer.ToLower().Trim();
 
-                            if (answer == "no")
+                            if (answer == "n")
                             {
                                 Console.Clear();
                                 ListaSpesa();
@@ -147,7 +147,8 @@
                                 isEnd = true;
                         }
                     }
-
+                    else
+                        Console.WriteLine("Inserisci un input valido relativo alle opzioni.\n");
                 }
             }
         }
